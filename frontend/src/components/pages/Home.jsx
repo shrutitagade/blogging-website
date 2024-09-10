@@ -30,7 +30,7 @@ const Home = () => {
     // Pagination Logic
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-    const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+    const currentBlogs = Array.isArray(filteredBlogs) ? filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog) : [];
     const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
 
     const handleSearchChange = (e) => {
@@ -202,7 +202,7 @@ const Home = () => {
                             <p className="text-danger">{error}</p>
                         </div>
                     ) : (
-                        Array.isArray(currentBlogs) && currentBlogs.length > 0 ? (
+                        currentBlogs.length > 0 ? (
                             <div className="blog-list">
                                 {currentBlogs.map((blog) => (
                                     <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded">
