@@ -18,7 +18,6 @@ const BlogList = () => {
             <br />
             <div className="container mt-5">
                 <h1>All Blogs</h1>
-                {/* Handle loading, error, and blogs state */}
                 {loading ? (
                     <p>Loading...</p>
                 ) : error ? (
