@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'https://blogging-website-51rh.onrender.com',
+      '/api': 'http://blogging-website-51rh.onrender.com',
     },
   },
 });
