@@ -202,7 +202,7 @@ const Home = () => {
                             <p className="text-danger">{error}</p>
                         </div>
                     ) : (
-                        currentBlogs.length > 0 ? (
+                        Array.isArray(currentBlogs) && currentBlogs.length > 0 ? (
                             <div className="blog-list">
                                 {currentBlogs.map((blog) => (
                                     <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded">
