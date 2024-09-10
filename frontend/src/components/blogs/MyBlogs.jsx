@@ -55,7 +55,7 @@ const MyBlogs = () => {
                     <p>Loading...</p>
                 ) : error ? (
                     <p className="text-danger">{error}</p>
-                ) : blogs.length > 0 ? (
+                ) : Array.isArray(blogs) && blogs.length > 0 ? (
                     blogs.filter(blog => blog.userId === authId).map((blog) => (
                         <div className="card mb-3" key={blog._id}>
                             <div className="row g-0">

@@ -22,7 +22,7 @@ const Navbar = () => {
             <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
                 <div className="container-fluid">
                     {/* BlogVerse Logo on the left */}
-                    <NavLink className="navbar-brand custom-font" href="/">BlogVerse</NavLink>
+                    <NavLink className="navbar-brand custom-font" to="/">BlogVerse</NavLink>
 
                     {/* Navbar toggler for mobile view */}
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" style={{ backgroundColor: "gray" }} data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -91,7 +91,7 @@ const Home = () => {
                         <>
                             <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
                                 <div className="container-fluid">
-                                    <NavLink className="navbar-brand custom-font" href="/">BlogVerse</NavLink>
+                                    <NavLink className="navbar-brand custom-font" to="/">BlogVerse</NavLink>
                                     &nbsp;&nbsp; &nbsp;
 
                                     <form className="form-inline mx-auto">
