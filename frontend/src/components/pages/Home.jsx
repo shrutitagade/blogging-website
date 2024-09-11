@@ -6,7 +6,7 @@ import { logout } from '../../features/authSlice';
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { blogs, loading, error } = useSelector((state) => state.blogs);
+    const { blogs = [], loading, error } = useSelector((state) => state.blogs);
     const [filteredBlogs, setFilteredBlogs] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,8 @@ const Home = () => {
     // Pagination Logic
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-    const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog) || []; // Default to empty array    const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+    const currentBlogs = Array.isArray(filteredBlogs) ? filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog) : [];
+    const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -201,36 +202,36 @@ const Home = () => {
                             <p className="text-danger">{error}</p>
                         </div>
                     ) : (
-                        // currentBlogs.length > 0 ? (
-                        <div className="blog-list">
-                            {currentBlogs.map((blog) => (
-                                <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded">
-                                    <div className="blog-text col-8">
-                                        <Link
-                                            to={`/blog/${blog._id}`}
-                                            className="text-decoration-none text-dark"
-                                            onClick={() => handleTitleClick(blog._id)}
-                                        >
-                                            <h4 className="blog-title">{blog.title}</h4>
-                                        </Link>
-                                        <p className="blog-description">{blog.description.substring(0, 100)}...</p>
-                                        <div className="blog-meta">
-                                            <span className="text-info">Views: {blog.views}</span>
-                                            <span className="text-info">Comments: {blog.comments.length}</span>
-                                            <span className="text-danger">Likes: {blog.likes}</span>
+                        currentBlogs.length > 0 ? (
+                            <div className="blog-list">
+                                {currentBlogs.map((blog) => (
+                                    <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded">
+                                        <div className="blog-text col-8">
+                                            <Link
+                                                to={`/blog/${blog._id}`}
+                                                className="text-decoration-none text-dark"
+                                                onClick={() => handleTitleClick(blog._id)}
+                                            >
+                                                <h4 className="blog-title">{blog.title}</h4>
+                                            </Link>
+                                            <p className="blog-description">{blog.description.substring(0, 100)}...</p>
+                                            <div className="blog-meta">
+                                                <span className="text-info">Views: {blog.views}</span>
+                                                <span className="text-info">Comments: {blog.comments.length}</span>
+                                                <span className="text-danger">Likes: {blog.likes}</span>
+                                            </div>
+                                        </div>
+                                        <div className="blog-image col-4">
+                                            {blog.image && <img src={blog.image} alt={blog.title} className="img-fluid" />}
                                         </div>
                                     </div>
-                                    <div className="blog-image col-4">
-                                        {blog.image && <img src={blog.image} alt={blog.title} className="img-fluid" />}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        // ) : (
-                        //     <div className="text-center">
-                        //         <p>No blogs available</p>
-                        //     </div>
-                        // )
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center">
+                                <p>No blogs available</p>
+                            </div>
+                        )
                     )}
                 </div>
 

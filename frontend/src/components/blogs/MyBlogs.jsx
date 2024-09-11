@@ -17,6 +17,7 @@ const MyBlogs = () => {
     useEffect(() => {
         if (authId) {
             dispatch(fetchBlogs());
+            console.log(blogs)
         } else {
             navigate('/login');
         }

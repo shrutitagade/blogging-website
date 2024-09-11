@@ -21,6 +21,7 @@ const Login = () => {
         if (userInfo) {
             // Store userInfo in localStorage after successful login
             localStorage.setItem('userLogin', JSON.stringify(userInfo));
+
             navigate('/');
         }
     }, [userInfo, navigate]);
