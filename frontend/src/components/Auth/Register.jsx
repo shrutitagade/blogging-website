@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../features/authSlice';
 import { useNavigate, NavLink } from 'react-router-dom';
 import Navbar from '../Navbar';
-import Footer from '../pages/Footer';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -91,7 +90,7 @@ const Register = () => {
             </div>
             <br></br>
             <br></br>
-            <Footer />
+
         </>
     );
 };
