@@ -30,8 +30,7 @@ const Home = () => {
     // Pagination Logic
     const indexOfLastBlog = currentPage * blogsPerPage;
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-    const currentBlogs = Array.isArray(filteredBlogs) ? filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog) : [];
-    const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+    const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog) || []; // Default to empty array    const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);

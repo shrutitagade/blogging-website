@@ -15,7 +15,7 @@ const BlogDetails = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { blogs = [] } = useSelector((state) => state.blogs);
+    const { blogs } = useSelector((state) => state.blogs);
     const { users } = useSelector((state) => state.auth);
 
     const [blog, setBlog] = useState(null);
@@ -38,18 +38,21 @@ const BlogDetails = () => {
     };
 
     useEffect(() => {
-        if (Array.isArray(blogs) && blogs.length > 0) {
+        if (blogs && blogs.length > 0) {
             const foundBlog = blogs.find(blog => blog._id === id);
             if (foundBlog) {
                 setBlog(foundBlog);
                 setEditTitle(foundBlog.title);
                 setEditDescription(foundBlog.description);
 
-                if (Array.isArray(users) && users.length > 0) {
-                    const blogger = users.find(user => String(user._id) === String(foundBlog.userId));
-                    setBloggerInfo(blogger || null);
+                if (users && users.length > 0) {
+                    const blogger = users.filter(user => String(user._id) === String(foundBlog.userId))[0];
+                    if (blogger) {
+                        setBloggerInfo(blogger);
+                    } else {
+                        setBloggerInfo(null);
+                    }
                 }
-
             }
         }
     }, [blogs, users, id]);
@@ -224,7 +227,7 @@ const BlogDetails = () => {
                                         <div className="mt-4" ref={commentsRef}>
                                             <h5>Comments:</h5>
                                             <ul className="list-unstyled">
-                                                {Array.isArray(blog.comments) && blog.comments.length > 0 ? (
+                                                {blog.comments && blog.comments.length > 0 ? (
                                                     blog.comments.map((comment, index) => (
                                                         <li key={index} className="mb-2">
                                                             <strong>{comment.user}:</strong> {comment.text}
