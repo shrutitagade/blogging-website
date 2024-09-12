@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBlog } from '../../features/blogSlice';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
+import axios from 'axios';
 
 const CreateBlog = () => {
     const [title, setTitle] = useState('');
@@ -22,43 +23,48 @@ const CreateBlog = () => {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('userId', userId);
-        if (image) {
-            formData.append('image', image);
-            setWaitingForImage(true);
-        }
+        // if (image) {
+        formData.append('image', image);
+        // setWaitingForImage(true);
+        //}
 
         // Show the loading dialog
-        setShowModal(true);
+        // setShowModal(true);
 
-        try {
-            // Dispatch the action
-            await dispatch(createBlog(formData)).unwrap();
-            setImageUploaded(true);
-        } catch (err) {
-            setImageUploaded(false);
-        }
-        setTimeout(() => {
-            alert("Your Blog has been created successfully");
-            navigate("/");
-        }, 6000);
+        // try {
+        // Dispatch the action
+        await axios.post("http://localhost:5000/api/blogs/create-blog", formData).then((resp) => {
+            console.log(resp.data)
+
+        }).catch((err) => {
+            console.log(err)
+        })
+        // setImageUploaded(true);
+        // } catch (err) {
+        //     setImageUploaded(false);
+        // }
+        // setTimeout(() => {
+        //     alert("Your Blog has been created successfully");
+        //     navigate("/");
+        // }, 6000);
     };
 
-    useEffect(() => {
-        if (imageUploaded) {
-            // Wait for 6 seconds to ensure the image URL is available
-            const timer = setTimeout(() => {
-                if (success && blog) {
-                    setWaitingForImage(false);
-                    setShowModal(false);
-                } else {
-                    setShowModal(false);
-                }
-            }, 5000);
+    // useEffect(() => {
+    //     if (imageUploaded) {
+    //         // Wait for 6 seconds to ensure the image URL is available
+    //         const timer = setTimeout(() => {
+    //             if (success && blog) {
+    //                 setWaitingForImage(false);
+    //                 setShowModal(false);
+    //             } else {
+    //                 setShowModal(false);
+    //             }
+    //         }, 5000);
 
-            // Clean up timer if component unmounts or if redirect is not needed
-            return () => clearTimeout(timer);
-        }
-    }, [imageUploaded, success, blog, navigate]);
+    //         // Clean up timer if component unmounts or if redirect is not needed
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [imageUploaded, success, blog, navigate]);
 
     return (
         <>
