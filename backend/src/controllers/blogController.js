@@ -1,24 +1,19 @@
 import Blog from '../models/Blog.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
-
 // Create a new blog
 export const createBlog = async (req, res) => {
     try {
         const { title, description, userId } = req.body;
-        console.log(title, description);
         const imageLocalPath = req.files?.image?.[0]?.path;
-        console.log(imageLocalPath);
         const image = imageLocalPath ? await uploadOnCloudinary(imageLocalPath) : null;
-        console.log("image", image);
 
         const blog = new Blog({
             title,
             description,
-            image: image?.url || "",
-            views: 0, // Initialize views to zero
+            image: image?.secure_url || "", // Use the secure URL
+            views: 0,
             likes: 0,
             userId
-            // user: req.user._id,  // Uncomment if user info is available and required
         });
 
         await blog.save();
@@ -27,6 +22,8 @@ export const createBlog = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
 
 // Get all blogs
 export const getBlogs = async (req, res) => {

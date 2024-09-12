@@ -10,7 +10,6 @@ const CreateBlog = () => {
     const [image, setImage] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [waitingForImage, setWaitingForImage] = useState(false);
-    const [imageUploaded, setImageUploaded] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error, success, blog } = useSelector((state) => state.blogs);
@@ -22,48 +21,41 @@ const CreateBlog = () => {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('userId', userId);
+
         if (image) {
             formData.append('image', image);
-            setWaitingForImage(true);
         }
 
         // Show the loading dialog
         setShowModal(true);
+        setWaitingForImage(true);
 
         try {
             // Dispatch the action
             await dispatch(createBlog(formData)).unwrap();
-            setImageUploaded(true);
+            setWaitingForImage(false);
+            setShowModal(true);
         } catch (err) {
-            setImageUploaded(false);
+            console.error("Error creating blog:", err);
+            setWaitingForImage(false);
+            setShowModal(false);
         }
-        setTimeout(() => {
-            alert("Your Blog has been created successfully");
-            navigate("/");
-        }, 6000);
     };
 
     useEffect(() => {
-        if (imageUploaded) {
-            // Wait for 6 seconds to ensure the image URL is available
+        if (success && blog) {
             const timer = setTimeout(() => {
-                if (success && blog) {
-                    setWaitingForImage(false);
-                    setShowModal(false);
-                } else {
-                    setShowModal(false);
-                }
-            }, 5000);
-
-            // Clean up timer if component unmounts or if redirect is not needed
+                setShowModal(false);
+                alert("Your Blog has been created successfully");
+                navigate('/');
+            }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [imageUploaded, success, blog, navigate]);
+    }, [success, blog, navigate]);
 
     return (
         <>
             <Navbar />
-            <br></br><br></br>
             <div className="container mt-5">
                 <h1 className="mb-4 text-center" style={{ color: "navy" }}>Create Blog</h1>
                 <form onSubmit={submitHandler} className="bg-light p-4 rounded shadow">
@@ -89,10 +81,7 @@ const CreateBlog = () => {
                         />
                     </div>
                     <div className="form-group mb-3">
-                        <label htmlFor="image" className="form-label">
-                            Image Upload
-                            <span className="text-danger"> (Make sure you have a stable internet connection)</span>
-                        </label>
+                        <label htmlFor="image" className="form-label">Image Upload</label>
                         <input
                             type="file"
                             className="form-control"
@@ -105,29 +94,22 @@ const CreateBlog = () => {
                             {loading || waitingForImage ? 'Creating...' : 'Create Blog'}
                         </button>
                     </div>
-
                     {error && <p className="text-danger mt-3">{error}</p>}
                 </form>
 
-                {/* Modal for loading and success messages */}
+                {/* Modal for success message */}
                 {showModal && (
                     <div className="modal fade show d-block" tabIndex="-1" role="dialog">
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content">
                                 <div className="modal-header bg-primary text-white">
                                     <h5 className="modal-title">
-                                        {loading || waitingForImage ? 'Please Wait...' : 'Success!'}
+                                        {waitingForImage ? 'Please Wait...' : 'Success!'}
                                     </h5>
                                 </div>
                                 <div className="modal-body text-center">
-                                    {(loading || waitingForImage) ? (
-                                        <>
-                                            <p>
-                                                {waitingForImage
-                                                    ? 'Your blog is being created. Please wait...'
-                                                    : 'Your blog is being created. Please wait...'}
-                                            </p>
-                                        </>
+                                    {waitingForImage ? (
+                                        <p>Your blog is being created. Please wait...</p>
                                     ) : (
                                         <>
                                             <i className="bi bi-check-circle-fill text-success mb-3" style={{ fontSize: '2rem' }}></i>
@@ -135,7 +117,7 @@ const CreateBlog = () => {
                                         </>
                                     )}
                                 </div>
-                                {!loading && !waitingForImage && (
+                                {!waitingForImage && (
                                     <div className="modal-footer">
                                         <button
                                             type="button"
@@ -151,8 +133,6 @@ const CreateBlog = () => {
                     </div>
                 )}
             </div>
-            <br></br><br></br>
-
         </>
     );
 };

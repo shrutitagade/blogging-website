@@ -2,44 +2,44 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchBlogs = createAsyncThunk('blogs/fetchBlogs', async () => {
-    const response = await axios.get('/api/blogs/');
+    const response = await axios.get('https://blogging-website-51rh.onrender.com/api/blogs/');
     return response.data;
 });
 
 export const fetchMyBlogs = createAsyncThunk('blogs/fetchMyBlogs', async (userId) => {
-    const response = await axios.get(`/api/blogs/myblogs?userId=${userId}`);
+    const response = await axios.get(`https://blogging-website-51rh.onrender.com/api/blogs/myblogs?userId=${userId}`);
     return response.data;
 });
 
 export const createBlog = createAsyncThunk('blogs/createBlog', async (blogData) => {
-    const response = await axios.post('/api/blogs/create-blog', blogData);
+    const response = await axios.post('https://blogging-website-51rh.onrender.com/api/blogs/create-blog', blogData);
     return response.data;
 });
 
 export const deleteBlog = createAsyncThunk('blogs/deleteBlog', async (blogId) => {
-    const response = await axios.delete(`/api/blogs/${blogId}`);
+    const response = await axios.delete(`https://blogging-website-51rh.onrender.com/api/blogs/${blogId}`);
     return response.data;
 });
 
 export const updateBlog = createAsyncThunk('blogs/updateBlog', async ({ id, title, description }) => {
-    const { data } = await axios.patch(`/api/blogs/${id}/update`, { title, description });
+    const { data } = await axios.patch(`https://blogging-website-51rh.onrender.com/api/blogs/${id}/update`, { title, description });
     return data;
 });
 
 // Increment likes
 export const incrementLikes = createAsyncThunk('blogs/incrementLikes', async (id) => {
-    const response = await axios.patch(`/api/blogs/${id}/likes`);
+    const response = await axios.patch(`https://blogging-website-51rh.onrender.com/api/blogs/${id}/likes`);
     return { id, likes: response.data.likes };
 });
 
 // Add a comment
 export const addComment = createAsyncThunk('blogs/addComment', async ({ id, user, text }) => {
-    const response = await axios.post(`/api/blogs/${id}/comments`, { user, text });
+    const response = await axios.post(`https://blogging-website-51rh.onrender.com/api/blogs/${id}/comments`, { user, text });
     return { id, comments: response.data };
 });
 
 export const incrementViews = createAsyncThunk('blogs/incrementViews', async (id) => {
-    const response = await axios.patch(`/api/blogs/${id}/views`);
+    const response = await axios.patch(`https://blogging-website-51rh.onrender.com/api/blogs/${id}/views`);
     return { id, views: response.data.views };
 });
 

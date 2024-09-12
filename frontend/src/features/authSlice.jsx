@@ -2,16 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (userData) => {
-    const response = await axios.post('/api/auth/login', userData);
+    const response = await axios.post('https://blogging-website-51rh.onrender.com/api/auth/login', userData);
     return response.data;
 });
 
 export const registerUser = createAsyncThunk('auth/registerUser', async (userData) => {
-    const response = await axios.post('/api/auth/register', userData);
+    const response = await axios.post('https://blogging-website-51rh.onrender.com/api/auth/register', userData);
     return response.data;
 });
 export const fetchUsers = createAsyncThunk('auth/fetchUsers', async () => {
-    const response = await axios.get('/api/auth/users');
+    const response = await axios.get('https://blogging-website-51rh.onrender.com/api/auth/users');
     return response.data;
 });
 const authSlice = createSlice({
