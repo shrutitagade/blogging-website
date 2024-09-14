@@ -3,12 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBlog } from '../../features/blogSlice';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
+import axios from 'axios';
 
 const CreateBlog = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
-
+    const [showModal, setShowModal] = useState(false);
+    const [waitingForImage, setWaitingForImage] = useState(false);
+    const [imageUploaded, setImageUploaded] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error, success, blog } = useSelector((state) => state.blogs);
@@ -19,44 +22,49 @@ const CreateBlog = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
-        if (image) {
-            formData.append('image', image);
-            // setWaitingForImage(true);
-        }
+        formData.append('image', image);
         formData.append('userId', userId);
-
-        alert("Your blog is being created. It may take a few moments for the changes to reflect.");
-        navigate("/")
-        // Show the loading dialog
-        // setShowModal(true);
-
+        // Ensure the image is not null
+        alert("Your blog is being created , the changes will reflect soon")
         try {
-            // Dispatch the action
-            await dispatch(createBlog(formData)).unwrap();
-            // setImageUploaded(true);
-        } catch (err) {
-            // setImageUploaded(false);
+            const response = await axios.post("http://localhost:5000/api/blogs/create-blog", formData,
+
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+
+                });
+            console.log(response.data);
+
+
+        } catch (error) {
+            console.error('Error uploading blog:', error);
         }
-        // setTimeout(() => {
-        //     alert("Your Blog has been created successfully");
-        //     navigate("/");
-        // }, 6000);
     };
+
+    // setImageUploaded(true);
+    // } catch (err) {
+    //     setImageUploaded(false);
+    // }
+    // setTimeout(() => {
+    //     alert("Your Blog has been created successfully");
+    //     navigate("/");
+    // }, 6000);
+
 
     // useEffect(() => {
     //     if (imageUploaded) {
     //         // Wait for 6 seconds to ensure the image URL is available
-    //         // const timer = setTimeout(() => {
+    //         const timer = setTimeout(() => {
     //             if (success && blog) {
     //                 setWaitingForImage(false);
     //                 setShowModal(false);
     //             } else {
     //                 setShowModal(false);
     //             }
-    // }, 5000);
+    //         }, 5000);
 
-    // Clean up timer if component unmounts or if redirect is not needed
-    // return () => clearTimeout(timer);
+    //         // Clean up timer if component unmounts or if redirect is not needed
+    //         return () => clearTimeout(timer);
     //     }
     // }, [imageUploaded, success, blog, navigate]);
 
@@ -101,16 +109,16 @@ const CreateBlog = () => {
                         />
                     </div>
                     <div className="d-flex justify-content-center mt-4">
-                        <button type="submit" className="btn btn-primary" >
-                            Create Blog
+                        <button type="submit" className="btn btn-primary" disabled={loading || waitingForImage}>
+                            {loading || waitingForImage ? 'Creating...' : 'Create Blog'}
                         </button>
                     </div>
 
-                    {/* {error && <p className="text-danger mt-3">{error}</p>} */}
+                    {error && <p className="text-danger mt-3">{error}</p>}
                 </form>
 
                 {/* Modal for loading and success messages */}
-                {/* {showModal && (
+                {showModal && (
                     <div className="modal fade show d-block" tabIndex="-1" role="dialog">
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content">
@@ -118,8 +126,8 @@ const CreateBlog = () => {
                                     <h5 className="modal-title">
                                         {loading || waitingForImage ? 'Please Wait...' : 'Success!'}
                                     </h5>
-                                </div> */}
-                {/* <div className="modal-body text-center">
+                                </div>
+                                <div className="modal-body text-center">
                                     {(loading || waitingForImage) ? (
                                         <>
                                             <p>
@@ -127,15 +135,15 @@ const CreateBlog = () => {
                                                     ? 'Your blog is being created. Please wait...'
                                                     : 'Your blog is being created. Please wait...'}
                                             </p>
-                                        </> */}
-                {/* ) : (
+                                        </>
+                                    ) : (
                                         <>
                                             <i className="bi bi-check-circle-fill text-success mb-3" style={{ fontSize: '2rem' }}></i>
                                             <p>Your blog has been created successfully!</p>
                                         </>
                                     )}
-                                </div> */}
-                {/* {!loading && !waitingForImage && (
+                                </div>
+                                {!loading && !waitingForImage && (
                                     <div className="modal-footer">
                                         <button
                                             type="button"
@@ -145,11 +153,11 @@ const CreateBlog = () => {
                                             Close and Go to Home
                                         </button>
                                     </div>
-                                )} */}
-                {/* </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                )} */}
+                )}
             </div>
             <br></br><br></br>
 
