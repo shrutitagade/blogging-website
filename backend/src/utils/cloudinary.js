@@ -17,13 +17,13 @@ const uploadOnCloudinary = async (localFilePath, retryCount = 3) => {
             resource_type: 'auto',
             upload_preset: 'image_preset',
             folder: 'images',
-            timeout: 60000 // Set timeout to 60 seconds
+
         });
 
         // File has been uploaded successfully
-        console.log("File uploaded to Cloudinary:", response.url);
+        console.log("File uploaded to Cloudinary:", response.secure_url);
         fs.unlinkSync(localFilePath); // Remove the locally saved temporary file
-        return response;
+        return response.secure_url;
 
     } catch (error) {
         console.error("Cloudinary upload error:", error);

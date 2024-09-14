@@ -14,7 +14,7 @@ export const createBlog = async (req, res) => {
         const blog = new Blog({
             title,
             description,
-            image: image?.url || "",
+            image: image || "",
             views: 0, // Initialize views to zero
             likes: 0,
             userId
