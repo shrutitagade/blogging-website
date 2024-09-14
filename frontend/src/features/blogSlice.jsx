@@ -12,17 +12,8 @@ export const fetchMyBlogs = createAsyncThunk('blogs/fetchMyBlogs', async (userId
 });
 
 export const createBlog = createAsyncThunk('blogs/createBlog', async (blogData) => {
-    try {
-        const response = await axios.post('https://blogging-website-51rh.onrender.com/api/blogs/create-blog', blogData);
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // },
-        //});
-        return response.data;
-    } catch (error) {
-        // Handle error properly, e.g., return an error message or log the error
-        throw error.response?.data || 'An error occurred while creating the blog.';
-    }
+    const response = await axios.post('https://blogging-website-51rh.onrender.com/api/blogs/create-blog', blogData);
+    return response.data;
 });
 
 export const deleteBlog = createAsyncThunk('blogs/deleteBlog', async (blogId) => {

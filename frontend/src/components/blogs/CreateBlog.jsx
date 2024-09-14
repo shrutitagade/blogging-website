@@ -22,49 +22,48 @@ const CreateBlog = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('image', image);
-        formData.append('userId', userId);
-        // Ensure the image is not null
-        alert("Your blog is being created , the changes will reflect soon")
-        try {
-            const response = await axios.post("http://localhost:5000/api/blogs/create-blog", formData,
-
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-
-                });
-            console.log(response.data);
-
-
-        } catch (error) {
-            console.error('Error uploading blog:', error);
+        if (image) {
+            formData.append('image', image);
+            // setWaitingForImage(true);
         }
+        formData.append('userId', userId);
+        alert("Your blog is being created. It may take a few moments for the changes to reflect.");
+
+        navigate("/")
+        // Show the loading dialog
+        // setShowModal(true);
+
+        // try {
+        // Dispatch the action
+        await axios.post("http://localhost:5000/api/blogs/create-blog", formData).then((resp) => {
+            console.log(resp.data);
+        }).catch((err) => {
+            console.log(err);
+        })
+        // setImageUploaded(true);
+        // } catch (err) {
+        // setImageUploaded(false);
+        //}
+        // setTimeout(() => {
+        //     alert("Your Blog has been created successfully");
+        //     navigate("/");
+        // }, 6000);
     };
-
-    // setImageUploaded(true);
-    // } catch (err) {
-    //     setImageUploaded(false);
-    // }
-    // setTimeout(() => {
-    //     alert("Your Blog has been created successfully");
-    //     navigate("/");
-    // }, 6000);
-
 
     // useEffect(() => {
     //     if (imageUploaded) {
     //         // Wait for 6 seconds to ensure the image URL is available
-    //         const timer = setTimeout(() => {
+    //         // const timer = setTimeout(() => {
     //             if (success && blog) {
     //                 setWaitingForImage(false);
     //                 setShowModal(false);
     //             } else {
     //                 setShowModal(false);
     //             }
-    //         }, 5000);
+    // }, 5000);
 
-    //         // Clean up timer if component unmounts or if redirect is not needed
-    //         return () => clearTimeout(timer);
+    // Clean up timer if component unmounts or if redirect is not needed
+    // return () => clearTimeout(timer);
     //     }
     // }, [imageUploaded, success, blog, navigate]);
 
@@ -109,12 +108,12 @@ const CreateBlog = () => {
                         />
                     </div>
                     <div className="d-flex justify-content-center mt-4">
-                        <button type="submit" className="btn btn-primary" disabled={loading || waitingForImage}>
-                            {loading || waitingForImage ? 'Creating...' : 'Create Blog'}
+                        <button type="submit" className="btn btn-primary">
+                            Create Blog
                         </button>
                     </div>
 
-                    {error && <p className="text-danger mt-3">{error}</p>}
+
                 </form>
 
                 {/* Modal for loading and success messages */}
