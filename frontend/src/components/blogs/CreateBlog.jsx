@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createBlog } from '../../features/blogSlice';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import axios from 'axios';
@@ -8,7 +7,7 @@ import axios from 'axios';
 const CreateBlog = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState();
     const [showModal, setShowModal] = useState(false);
     const [waitingForImage, setWaitingForImage] = useState(false);
     const [imageUploaded, setImageUploaded] = useState(false);
@@ -35,6 +34,7 @@ const CreateBlog = () => {
 
         // try {
         // Dispatch the action
+
         await axios.post("http://localhost:5000/api/blogs/create-blog", formData).then((resp) => {
             console.log(resp.data);
         }).catch((err) => {
@@ -82,7 +82,7 @@ const CreateBlog = () => {
                             id="title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            required
+
                         />
                     </div>
                     <div className="form-group mb-3">
@@ -92,7 +92,7 @@ const CreateBlog = () => {
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            required
+
                         />
                     </div>
                     <div className="form-group mb-3">

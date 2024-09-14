@@ -25,6 +25,10 @@ app.use(cors({ origin: '*' }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use((req, res, next) => {
+    req.setTimeout(600000);  // 10 minutes
+    next();
+});
 
 const PORT = process.env.PORT || 5000;
 

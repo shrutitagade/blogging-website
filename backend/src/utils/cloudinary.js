@@ -17,7 +17,7 @@ const uploadOnCloudinary = async (localFilePath, retryCount = 3) => {
             resource_type: 'auto',
             upload_preset: 'image_preset',
             folder: 'images',
-
+            timeout: 600000
         });
 
         // File has been uploaded successfully
