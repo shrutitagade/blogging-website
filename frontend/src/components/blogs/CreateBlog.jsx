@@ -38,11 +38,14 @@ const CreateBlog = () => {
 
         try {
             // Dispatch createBlog action and pass the formData
-            await axios.post("http://localhost:5000/api/blogs/create-blog", formData);
+            await dispatch(createBlog(formData)).then((resp) => {
+                console.log(resp.data)
+            }).catch((err) => {
+                console.log(err)
+            });
 
             // Notify user of success
-            alert("Your Blog has been created successfully");
-            navigate("/"); // Redirect to home page
+            // Redirect to home page
         } catch (err) {
             // Handle errors
             console.error("Error creating blog:", err);
