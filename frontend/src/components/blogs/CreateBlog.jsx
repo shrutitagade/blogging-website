@@ -38,7 +38,7 @@ const CreateBlog = () => {
 
         try {
             // Dispatch createBlog action and pass the formData
-            await dispatch(createBlog(formData)).unwrap();
+            await axios.post("http://localhost:5000/api/blogs/create-blog", formData);
 
             // Notify user of success
             alert("Your Blog has been created successfully");
