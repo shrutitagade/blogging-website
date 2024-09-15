@@ -36,21 +36,21 @@ const CreateBlog = () => {
         // try {
         // Dispatch the action
 
-        try {
-            // Dispatch createBlog action and pass the formData
-            await dispatch(createBlog(formData)).then((resp) => {
-                console.log(resp.data)
-            }).catch((err) => {
-                console.log(err)
-            });
+        // try {
+        // Dispatch createBlog action and pass the formData
+        await dispatch(createBlog(formData)).then((resp) => {
+            console.log(resp.data)
+        }).catch((err) => {
+            console.log(err)
+        });
 
-            // Notify user of success
-            // Redirect to home page
-        } catch (err) {
-            // Handle errors
-            console.error("Error creating blog:", err);
-            alert("Failed to create blog. Please try again.");
-        }
+        // Notify user of success
+        // Redirect to home page
+        // } catch (err) {
+        //     // Handle errors
+        //     console.error("Error creating blog:", err);
+        //     alert("Failed to create blog. Please try again.");
+        // }
         // setImageUploaded(true);
         // } catch (err) {
         // setImageUploaded(false);
