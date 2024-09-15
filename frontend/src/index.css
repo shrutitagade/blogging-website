@@ -198,6 +198,12 @@
     color: white;
 }
 
+.description-text {
+    white-space: pre-wrap;
+    font-family: "Roboto Serif", serif;
+    font-optical-sizing: auto;
+
+}
 
 
 /* Navbar styling */
@@ -242,6 +248,8 @@
 
 
     }
+
+
 
     .navbar-brand {
         font-size: 25px;

@@ -26,16 +26,16 @@ const CreateBlog = () => {
             // setWaitingForImage(true);
         }
         formData.append('userId', userId);
-        alert("Your blog is being created. It may take a few moments for the changes to reflect.");
+        // alert("Your blog is being created. It may take a few moments for the changes to reflect.");
 
-        navigate("/")
+        // navigate("/")
         // Show the loading dialog
         // setShowModal(true);
 
         // try {
         // Dispatch the action
 
-        await axios.post("http://localhost:5000/api/blogs/create-blog", formData).then((resp) => {
+        await axios.post("https://blogging-website-51rh.onrender.com/api/blogs/create-blog", formData).then((resp) => {
             console.log(resp.data);
         }).catch((err) => {
             console.log(err);

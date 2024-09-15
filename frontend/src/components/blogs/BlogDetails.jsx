@@ -140,7 +140,7 @@ const BlogDetails = () => {
                                                 className="form-control"
                                                 value={editDescription}
                                                 onChange={(e) => setEditDescription(e.target.value)}
-                                                rows="5"
+                                                rows="10" cols="50"
                                             />
                                         </div>
                                         <button className="btn btn-success" onClick={handleUpdate}>Save Changes</button>
@@ -206,7 +206,7 @@ const BlogDetails = () => {
                                         <hr></hr>
 
                                         {/* Blog Description */}
-                                        <p className=" text-justify" style={{ fontSize: '1.1rem', lineHeight: "26px" }}>
+                                        <p className="text-justify description-text" style={{ lineHeight: "26px", fontWeight: "450", fontSize: "16px" }} >
                                             {blog.description}
                                         </p>
 
