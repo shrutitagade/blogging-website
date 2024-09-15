@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../Navbar';
 import axios from 'axios';
+import { createBlog } from '../../features/blogSlice';
 
 const CreateBlog = () => {
     const [title, setTitle] = useState('');
@@ -26,20 +27,27 @@ const CreateBlog = () => {
             // setWaitingForImage(true);
         }
         formData.append('userId', userId);
-        // alert("Your blog is being created. It may take a few moments for the changes to reflect.");
+        alert("Your blog is being created. It may take a few moments for the changes to reflect.");
 
-        // navigate("/")
+        navigate("/")
         // Show the loading dialog
         // setShowModal(true);
 
         // try {
         // Dispatch the action
 
-        await axios.post("https://blogging-website-51rh.onrender.com/api/blogs/create-blog", formData).then((resp) => {
-            console.log(resp.data);
-        }).catch((err) => {
-            console.log(err);
-        })
+        try {
+            // Dispatch createBlog action and pass the formData
+            await dispatch(createBlog(formData)).unwrap();
+
+            // Notify user of success
+            alert("Your Blog has been created successfully");
+            navigate("/"); // Redirect to home page
+        } catch (err) {
+            // Handle errors
+            console.error("Error creating blog:", err);
+            alert("Failed to create blog. Please try again.");
+        }
         // setImageUploaded(true);
         // } catch (err) {
         // setImageUploaded(false);
