@@ -37,6 +37,11 @@
     background-color: black;
 }
 
+.blog-image {
+    height: 400px;
+    width: 400px;
+}
+
 .search-btn:hover {
     background-color: gray;
     color: white;

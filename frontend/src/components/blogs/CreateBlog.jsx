@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons'; // Import Font Awesome icon
 import Navbar from '../Navbar';
-import axios from 'axios';
 import { createBlog } from '../../features/blogSlice';
 
 const CreateBlog = () => {
@@ -10,11 +11,10 @@ const CreateBlog = () => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState();
     const [showModal, setShowModal] = useState(false);
-    const [waitingForImage, setWaitingForImage] = useState(false);
-    const [imageUploaded, setImageUploaded] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, success, blog } = useSelector((state) => state.blogs);
     const userId = JSON.parse(localStorage.getItem('userLogin'))?._id;
 
     const submitHandler = async (e) => {
@@ -24,64 +24,40 @@ const CreateBlog = () => {
         formData.append('description', description);
         if (image) {
             formData.append('image', image);
-            // setWaitingForImage(true);
         }
         formData.append('userId', userId);
-        alert("Your blog is being created. It may take a few moments for the changes to reflect.");
 
-        navigate("/")
-        // Show the loading dialog
-        // setShowModal(true);
+        // Show the modal and indicate the loading state
+        setModalMessage('Creating your blog. Please wait...');
+        setShowModal(true);
+        setIsLoading(true);
 
-        // try {
-        // Dispatch the action
+        try {
+            // Dispatch the createBlog action and wait for the result
+            const response = await dispatch(createBlog(formData));
 
-        // try {
-        // Dispatch createBlog action and pass the formData
-        await dispatch(createBlog(formData)).then((resp) => {
-            console.log(resp.data)
-        }).catch((err) => {
-            console.log(err)
-        });
+            if (response.payload) {
+                // Blog created successfully, update the modal message
+                setModalMessage('Your blog has been successfully created!');
+                setIsLoading(false);
 
-        // Notify user of success
-        // Redirect to home page
-        // } catch (err) {
-        //     // Handle errors
-        //     console.error("Error creating blog:", err);
-        //     alert("Failed to create blog. Please try again.");
-        // }
-        // setImageUploaded(true);
-        // } catch (err) {
-        // setImageUploaded(false);
-        //}
-        // setTimeout(() => {
-        //     alert("Your Blog has been created successfully");
-        //     navigate("/");
-        // }, 6000);
+                // Auto-close the modal and redirect after 2 seconds
+                setTimeout(() => {
+                    setShowModal(false);
+                    navigate('/');
+                }, 3000);
+            }
+        } catch (error) {
+            console.error("Error creating blog:", error);
+            setModalMessage('There was an issue creating your blog. Please try again.');
+            setIsLoading(false);
+        }
     };
-
-    // useEffect(() => {
-    //     if (imageUploaded) {
-    //         // Wait for 6 seconds to ensure the image URL is available
-    //         // const timer = setTimeout(() => {
-    //             if (success && blog) {
-    //                 setWaitingForImage(false);
-    //                 setShowModal(false);
-    //             } else {
-    //                 setShowModal(false);
-    //             }
-    // }, 5000);
-
-    // Clean up timer if component unmounts or if redirect is not needed
-    // return () => clearTimeout(timer);
-    //     }
-    // }, [imageUploaded, success, blog, navigate]);
 
     return (
         <>
             <Navbar />
-            <br></br><br></br>
+            <br /><br />
             <div className="container mt-5">
                 <h1 className="mb-4 text-center" style={{ color: "navy" }}>Create Blog</h1>
                 <form onSubmit={submitHandler} className="bg-light p-4 rounded shadow">
@@ -93,7 +69,7 @@ const CreateBlog = () => {
                             id="title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-
+                            required
                         />
                     </div>
                     <div className="form-group mb-3">
@@ -103,13 +79,14 @@ const CreateBlog = () => {
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-
+                            required
+                            rows="6"
                         />
                     </div>
                     <div className="form-group mb-3">
                         <label htmlFor="image" className="form-label">
                             Image Upload
-                            <span className="text-danger"> (Make sure you have a stable internet connection)</span>
+                            <span className="text-danger"> (Ensure a stable internet connection)</span>
                         </label>
                         <input
                             type="file"
@@ -119,58 +96,42 @@ const CreateBlog = () => {
                         />
                     </div>
                     <div className="d-flex justify-content-center mt-4">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-dark">
                             Create Blog
                         </button>
                     </div>
-
-
                 </form>
 
                 {/* Modal for loading and success messages */}
                 {showModal && (
-                    <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-labelledby="blogModal" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered" role="document">
                             <div className="modal-content">
-                                <div className="modal-header bg-primary text-white">
-                                    <h5 className="modal-title">
-                                        {loading || waitingForImage ? 'Please Wait...' : 'Success!'}
-                                    </h5>
+                                <div className="modal-header bg-dark text-white">
+                                    <h5 className="modal-title" id="blogModal">Blog Status</h5>
+                                    {/* Close button */}
+                                    <button type="button" className="btn btn-link text-white" onClick={() => setShowModal(false)}>
+                                        <FontAwesomeIcon icon={faTimes} />
+                                    </button>
                                 </div>
                                 <div className="modal-body text-center">
-                                    {(loading || waitingForImage) ? (
-                                        <>
-                                            <p>
-                                                {waitingForImage
-                                                    ? 'Your blog is being created. Please wait...'
-                                                    : 'Your blog is being created. Please wait...'}
-                                            </p>
-                                        </>
+                                    <p className="fs-5 text-description" style={{ fontWeight: "500" }}>{modalMessage}</p>
+                                    {isLoading ? (
+                                        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+                                            <span className="visually-hidden"></span>
+                                        </div>
+                                    ) : modalMessage === 'Your blog has been successfully created!' ? (
+                                        <></>
                                     ) : (
-                                        <>
-                                            <i className="bi bi-check-circle-fill text-success mb-3" style={{ fontSize: '2rem' }}></i>
-                                            <p>Your blog has been created successfully!</p>
-                                        </>
+                                        <p className="text-danger">Please try again.</p>
                                     )}
                                 </div>
-                                {!loading && !waitingForImage && (
-                                    <div className="modal-footer">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary"
-                                            onClick={() => navigate('/')}
-                                        >
-                                            Close and Go to Home
-                                        </button>
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </div>
                 )}
             </div>
-            <br></br><br></br>
-
+            <br /><br />
         </>
     );
 };

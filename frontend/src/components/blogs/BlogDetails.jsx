@@ -6,7 +6,6 @@ import { fetchUsers } from '../../features/authSlice';
 import Navbar from '../Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faEye, faEdit, faTrash, faMicrophone, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
-import Footer from '../pages/Footer';
 
 import { speak } from '../../SpeechHelper';
 
@@ -76,9 +75,14 @@ const BlogDetails = () => {
 
     const handleDeleteBlog = () => {
         if (window.confirm("Are you sure you want to delete this blog?")) {
+            navigate("/")
             dispatch(deleteBlog(id))
                 .unwrap()
-                .then(() => navigate("/"))
+                .then(() => {
+                    alert("Your blog has been Deleted successfully");
+                    dispatch(fetchBlogs())
+                }
+                )
                 .catch((error) => console.error('Failed to delete the blog:', error));
         }
     };

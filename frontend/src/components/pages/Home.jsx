@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBlogs, incrementViews } from '../../features/blogSlice';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../features/authSlice';
-
 const Home = () => {
     const dispatch = useDispatch();
     const { blogs, loading, error } = useSelector((state) => state.blogs);
@@ -32,7 +31,7 @@ const Home = () => {
     const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
     const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
     const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
-
+    const navigate = useNavigate();
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -63,7 +62,7 @@ const Home = () => {
     const logoutHandler = () => {
         dispatch(logout());
         localStorage.removeItem('userLogin');
-        dispatch(fetchBlogs());
+        navigate("/")
     };
 
     const auth = localStorage.getItem("userLogin");
@@ -169,7 +168,7 @@ const Home = () => {
                         <>
                             <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
                                 <div className="container-fluid">
-                                    <a className="navbar-brand custom-font" href="/">BlogVerse</a>
+                                    <NavLink className="navbar-brand custom-font" to="/">BlogVerse</NavLink>
                                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                         <span className="navbar-toggler-icon"></span>
                                     </button>
@@ -203,9 +202,9 @@ const Home = () => {
                         </div>
                     ) : (
                         currentBlogs.length > 0 ? (
-                            <div className="blog-list">
+                            <div className="blog-list" >
                                 {currentBlogs.map((blog) => (
-                                    <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded">
+                                    <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded" >
                                         <div className="blog-text col-8">
                                             <Link
                                                 to={`/blog/${blog._id}`}

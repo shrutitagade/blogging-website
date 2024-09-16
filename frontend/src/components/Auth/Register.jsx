@@ -3,19 +3,48 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../features/authSlice';
 import { useNavigate, NavLink } from 'react-router-dom';
 import Navbar from '../Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';  // Import the icons
+import { fetchBlogs } from '../../features/blogSlice';
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [passwordHoverText, setPasswordHoverText] = useState('Show Password'); // State for hover text
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error, userInfo } = useSelector((state) => state.auth);
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        dispatch(registerUser({ name, email, password }));
+        try {
+            // Dispatch the registerUser action
+            const resp = await dispatch(registerUser({ name, email, password }));
+            const User = resp.payload;
+            console.log(User)
+            // Check if registration was successful
+            if (User && User.email) {
+                alert("You have registered successfully!");
+                if (userInfo) {
+                    // Store userInfo in localStorage after successful login
+                    localStorage.setItem('userLogin', JSON.stringify(userInfo));
+                    navigate('/');
+                }
+                // Navigate to the home page
+                navigate('/');
+                dispatch(fetchBlogs())
+            } else {
+                alert("Registration failed. Please try again.");
+            }
+
+        } catch (error) {
+            console.error("Registration error:", error);
+            alert("There was an issue with registration. Please try again.");
+        }
     };
+
 
     useEffect(() => {
         if (userInfo) {
@@ -23,10 +52,16 @@ const Register = () => {
         }
     }, [userInfo, navigate]);
 
+    // Function to toggle password visibility and change hover text accordingly
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+        setPasswordHoverText(showPassword ? 'Show Password' : 'Hide Password');  // Change hover text
+    };
+
     return (
         <>
             <Navbar />
-            <br></br><br></br>
+            <br /><br />
             <div className="container mt-5">
                 <div className="row justify-content-center">
                     <div className="col-md-6">
@@ -57,16 +92,29 @@ const Register = () => {
                                         required
                                     />
                                 </div>
-                                <div className="mb-3">
+                                <div className="mb-3 position-relative">
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}  // Conditionally set input type
                                         className="form-control"
                                         id="password"
                                         placeholder="Enter your password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
+                                    />
+                                    {/* Icon for showing/hiding password */}
+                                    <FontAwesomeIcon
+                                        icon={showPassword ? faEyeSlash : faEye}
+                                        onClick={togglePasswordVisibility}
+                                        className="position-absolute"
+                                        style={{
+                                            right: '10px',
+                                            top: '68%',
+                                            transform: 'translateY(-50%)',
+                                            cursor: 'pointer'
+                                        }}
+                                        title={passwordHoverText} // Show hover text dynamically
                                     />
                                 </div>
                                 <button
@@ -76,21 +124,17 @@ const Register = () => {
                                 >
                                     {loading ? 'Registering...' : 'Register'}
                                 </button>
-                                {error && <div className="alert alert-danger mt-3">{error}</div>}
                             </form>
                             <div className="text-center mt-3">
                                 <p>Already have an account? <NavLink to="/login" >
                                     Login
                                 </NavLink></p>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br></br>
-            <br></br>
-
+            <br /><br />
         </>
     );
 };
