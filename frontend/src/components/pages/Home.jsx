@@ -189,7 +189,7 @@ const Home = () => {
 
                 <br /><br />
 
-                <div className="container mt-5">
+                <div className="container mt-5" id="cont">
                     {loading ? (
                         <div className="text-center">
                             <div className="spinner-border text-primary" role="status">
@@ -204,8 +204,8 @@ const Home = () => {
                         currentBlogs.length > 0 ? (
                             <div className="blog-list" >
                                 {currentBlogs.map((blog) => (
-                                    <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded" >
-                                        <div className="blog-text col-8">
+                                    <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded blogs" id="item" >
+                                        <div className="blog-text col-8" >
                                             <Link
                                                 to={`/blog/${blog._id}`}
                                                 className="text-decoration-none text-dark"
@@ -215,8 +215,8 @@ const Home = () => {
                                             </Link>
                                             <p className="blog-description">{blog.description.substring(0, 100)}...</p>
                                             <div className="blog-meta">
-                                                <span className="text-info">Views: {blog.views}</span>
-                                                <span className="text-info">Comments: {blog.comments.length}</span>
+                                                <span className="text-info">Views: {blog.views}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span className="text-info">Comments: {blog.comments.length}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <span className="text-danger">Likes: {blog.likes}</span>
                                             </div>
                                         </div>

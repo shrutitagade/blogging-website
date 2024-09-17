@@ -58,23 +58,21 @@ const MyBlogs = () => {
                     <p className="text-danger">{error}</p>
                 ) : blogs.length > 0 ? (
                     blogs.filter(blog => blog.userId === authId).map((blog) => (
-                        <div className="card mb-3" key={blog._id}>
-                            <div className="row g-0">
-                                <div className="col-md-8">
-                                    <div className="card-body">
-                                        <Link
-                                            to={`/blog/${blog._id}`}
-                                            className="text-decoration-none text-dark"
-                                            onClick={() => handleTitleClick(blog._id)}
-                                        >
-                                            <h4 className="card-title">{blog.title}</h4>
-                                        </Link>
-                                        <p className="card-text">{blog.description.substring(0, 100)}...</p>
-                                        <div className="blog-meta">
-                                            <span className="text-info">Views: {blog.views}</span>
-                                            <span className="text-info">Comments: {blog.comments.length}</span>
-                                            <span className="text-danger">Likes: {blog.likes}</span>
-                                        </div>
+                        <div key={blog._id}>
+                            <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded" >
+                                <div className="blog-text col-8">
+                                    <Link
+                                        to={`/blog/${blog._id}`}
+                                        className="text-decoration-none text-dark"
+                                        onClick={() => handleTitleClick(blog._id)}
+                                    >
+                                        <h4 className="blog-title">{blog.title}</h4>
+                                    </Link>
+                                    <p className="blog-description">{blog.description.substring(0, 100)}...</p>
+                                    <div className="blog-meta">
+                                        <span className="text-info">Views: {blog.views}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span className="text-info">Comments: {blog.comments.length}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span className="text-danger">Likes: {blog.likes}</span>
                                     </div>
                                 </div>
                                 <div className="blog-image col-4">

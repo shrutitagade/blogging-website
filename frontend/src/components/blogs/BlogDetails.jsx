@@ -154,7 +154,7 @@ const BlogDetails = () => {
                                 ) : (
                                     <>
                                         {/* Blog Title */}
-                                        <h1 className="text-left mb-3" style={{ fontWeight: 'bold', cursor: 'pointer' }}>
+                                        <h1 className="text-left mb-3 title" style={{ fontWeight: 'bold', cursor: 'pointer' }}>
                                             {blog.title}
                                         </h1>
                                         {/* Blogger Info and Icons */}

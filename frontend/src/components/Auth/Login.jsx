@@ -18,28 +18,21 @@ const Login = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        // try {
+
         // Dispatch loginUser action and wait for the response
-        const resp = await dispatch(loginUser({ email, password }));
-        const User = resp;
-        console.log(User)
+        const resp = await dispatch(loginUser({ email, password })); // unwrap() to get the actual payload
+        console.log(resp.payload);
+
         // Check if the login was successful
-        if (User.email && User._id) {
+        if (resp.payload) {
             alert("Login successful!");
+            navigate('/'); // Navigate to home page after successful login
         } else {
-            if (!User.email && User.password || User.email && !User.password) {
-                alert("Invalid email or password. Please try again.");
-            }
-            else {
-                alert("You haven't registered yet, please register");
-                navigate("/register");
-            }
+            alert("Please check your login credentials.");
         }
-        // } catch (err) {
-        //     console.error("Login error:", err);
-        //     alert("There was an issue logging in. Please try again.");
-        // }
+
     };
+
 
     useEffect(() => {
         if (userInfo) {
