@@ -4,9 +4,36 @@
 }
 
 .blog-item {
-    height: 210px;
+    height: auto;
+
 }
 
+/* Footer styling start */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    /* This ensures the content area expands to fill available space */
+}
+
+footer {
+    margin-top: auto;
+    /* Other styles for the footer */
+}
+
+/* Footer stylind end */
 .card {
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
@@ -72,16 +99,17 @@
 .blog-image img {
     width: 100%;
     height: auto;
-    max-height: 160px;
+    max-height: 120px;
     /* Adjust as needed */
     object-fit: cover;
     border-radius: 8px;
 }
 
 .blog-meta {
-    display: flex;
-    justify-content: space-between;
+
     font-size: 0.875rem;
+    position: relative;
+    /* top: 30px; */
     color: #777;
 }
 
@@ -242,13 +270,15 @@
     } */
 
     .blog-meta {
-        gap: 5px
+        position: relative;
+        top: auto;
+
     }
 
-    .blog-image {
-        height: auto;
-        width: 100%;
-    }
+    /* .blog-text {
+        position: relative;
+        padding-left: 0
+    } */
 
 
     .blog-title {
@@ -275,8 +305,9 @@
     } */
 
     .blog-image {
-        width: 200px;
+        width: 100%;
         padding: 0;
+        max-height: 100px;
     }
 
     .navbar-toggler {

@@ -22,18 +22,18 @@ const Register = () => {
         try {
             // Dispatch the registerUser action
             const resp = await dispatch(registerUser({ name, email, password }));
-            const User = resp.payload;
+            const User = resp;
             console.log(User)
             // Check if registration was successful
-            if (User && User.email) {
+            if (User) {
                 alert("You have registered successfully!");
                 if (userInfo) {
                     // Store userInfo in localStorage after successful login
                     localStorage.setItem('userLogin', JSON.stringify(userInfo));
-                    navigate('/');
+                    navigate('/login');
                 }
                 // Navigate to the home page
-                navigate('/');
+                navigate('/login');
                 dispatch(fetchBlogs())
             } else {
                 alert("Registration failed. Please try again.");

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-dark text-white py-4 mt-auto w-100" style={{ marginBottom: "0px" }}>
+        <footer className="bg-dark text-white py-4 mt-auto w-100">
             <div className="container-fluid">
                 <div className="row text-center text-md-start">
                     {/* About Section */}
@@ -38,7 +38,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 };
 

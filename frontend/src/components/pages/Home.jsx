@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchBlogs, incrementViews } from '../../features/blogSlice';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '../../features/authSlice';
+import { faComment, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const Home = () => {
     const dispatch = useDispatch();
     const { blogs, loading, error } = useSelector((state) => state.blogs);
@@ -11,7 +14,17 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [blogsPerPage] = useState(5);
     const [pageRange, setPageRange] = useState([1, 4]);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Mobile size threshold is 768px
+        };
 
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     useEffect(() => {
         dispatch(fetchBlogs());
     }, [dispatch]);
@@ -62,7 +75,7 @@ const Home = () => {
     const logoutHandler = () => {
         dispatch(logout());
         localStorage.removeItem('userLogin');
-        navigate("/")
+        navigate("/login")
     };
 
     const auth = localStorage.getItem("userLogin");
@@ -168,7 +181,7 @@ const Home = () => {
                         <>
                             <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
                                 <div className="container-fluid">
-                                    <NavLink className="navbar-brand custom-font" to="/">BlogVerse</NavLink>
+                                    <NavLink className="navbar-brand custom-font" to="/login">BlogVerse</NavLink>
                                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                         <span className="navbar-toggler-icon"></span>
                                     </button>
@@ -213,12 +226,20 @@ const Home = () => {
                                             >
                                                 <h4 className="blog-title">{blog.title}</h4>
                                             </Link>
-                                            <p className="blog-description">{blog.description.substring(0, 100)}...</p>
-                                            <div className="blog-meta">
-                                                <span className="text-info">Views: {blog.views}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <span className="text-info">Comments: {blog.comments.length}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <span className="text-danger">Likes: {blog.likes}</span>
+                                            <p className="blog-description">
+                                                {isMobile ? blog.description.substring(0, 40) : blog.description.substring(0, 100)}...
+                                            </p>                                            <div className="blog-meta">
+                                                <span style={{ color: "navy", fontWeight: "500" }}>
+                                                    {new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span>
+                                                    <FontAwesomeIcon icon={faThumbsUp} title="Like" /> ({blog.likes})
+                                                </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span>
+                                                    <FontAwesomeIcon icon={faComment} title="Comments" /> ({blog.comments ? blog.comments.length : 0})
+                                                </span>
                                             </div>
+
                                         </div>
                                         <div className="blog-image col-4">
                                             {blog.image && <img src={blog.image} alt={blog.title} className="img-fluid" />}
