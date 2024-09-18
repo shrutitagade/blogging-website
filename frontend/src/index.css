@@ -272,7 +272,11 @@ footer {
     .blog-meta {
         position: relative;
         top: auto;
-        font-size: 13px;
+        font-size: 12px;
+    }
+
+    #meta {
+        font-size: 11px;
     }
 
     /* .blog-text {

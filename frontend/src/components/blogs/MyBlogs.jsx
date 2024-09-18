@@ -80,6 +80,7 @@ const MyBlogs = () => {
                         {error}
                     </div>
                 ) : blogs.filter(blog => blog.userId === authId).length > 0 ? (
+
                     blogs.filter(blog => blog.userId === authId).map((blog) => (
                         <div key={blog._id} className="blog-item d-flex mb-4 border p-3 rounded blogs">
                             <div className="blog-text col-8">
@@ -92,15 +93,15 @@ const MyBlogs = () => {
                                 <p className="blog-description">
                                     {isMobile ? blog.description.substring(0, 40) : blog.description.substring(0, 100)}...
                                 </p>
-                                <div className="blog-meta">
+                                <div className="blog-meta" id='meta'>
                                     <span style={{ color: "navy", fontWeight: "500" }}>
                                         {new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                    </span> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </span> &nbsp;&nbsp;&nbsp;
                                     <span>
-                                        <FontAwesomeIcon icon={faThumbsUp} title="Like" /> ({blog.likes})
-                                    </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <FontAwesomeIcon icon={faThumbsUp} title="Like" id="t" /> ({blog.likes})
+                                    </span>&nbsp;&nbsp;&nbsp;
                                     <span>
-                                        <FontAwesomeIcon icon={faComment} title="Comments" /> ({blog.comments ? blog.comments.length : 0})
+                                        <FontAwesomeIcon icon={faComment} title="Comments" id="c" /> ({blog.comments ? blog.comments.length : 0})
                                     </span>
                                 </div>
                             </div>
