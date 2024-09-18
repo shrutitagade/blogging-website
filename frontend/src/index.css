@@ -254,8 +254,8 @@ footer {
     }
 
     #cont {
-        padding-right: 5px;
-        padding-left: 5px;
+        padding-right: 2px;
+        padding-left: 2px;
         margin-top: 5rem !important;
     }
 
@@ -272,7 +272,7 @@ footer {
     .blog-meta {
         position: relative;
         top: auto;
-
+        font-size: 13px;
     }
 
     /* .blog-text {
